@@ -33,5 +33,5 @@ The only way to get this information is through Instagram's API. I have created 
 
 == Screenshots ==
 
-1. widget.png
-2. widget_settings.png
+1. widget.png`
+2. `widget_settings.png`
