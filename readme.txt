@@ -6,11 +6,11 @@ Requires at least: 3.0
 Tested up to: 3.3
 Stable tag: 1
 
-This plugin get a users recent images, up to 10, and displays them in a Wordpress Widget. It will also display likes and comments if uplaoded with the images.
+This plugin gets a user's recent images, up to 10, and displays them in a Wordpress Widget. It has the option to display likes and comments also.
 
 == Description ==
 
-This plugin get a users recent images, up to 10, and displays them in a Wordpress Widget. It will also display likes and comments if uplaoded with the images. It creates a widget where all the settings can be adjusted.
+This plugin gets a users most recent activity, up to 10, and displays them in a Wordpress Widget. It has the option to display likes and comments also. It creates a widget where all the settings can be adjusted.
 
 == Installation ==
 
@@ -27,12 +27,11 @@ This plugin get a users recent images, up to 10, and displays them in a Wordpres
 
 Instagram needs to know what user you are and the access token is manditory for Instagram to prove you have taken the right steps to view your gallery.
 
-= Why do I nned to visit [instagram.davidmregister](http://instagram.davidmregister.com "http://instagram.davidmregister.com") to get my User_ID and access token? =
+= Why do I need to visit http://instagram.davidmregister.com to get my User_ID and access token? =
 
-The only way to get this information is through Instagram's API. I have simple created a portal to get make it easy for users to get this information.
+The only way to get this information is through Instagram's API. I have created a simple portal to make it easy for users to get this information.
 
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the directory of the stable readme.txt, so in this case, `/tags/4.3/screenshot-1.png` (or jpg, jpeg, gif)
-2. This is the second screen shot
+1. `http://instagram.davidmregister.com/images/widget.png`
+2. `http://instagram.davidmregister.com/images/widget_settings.png`
