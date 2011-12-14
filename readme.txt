@@ -23,7 +23,7 @@ This plugin gets a users most recent activity, up to 10, and displays them in a 
 
 == Frequently Asked Questions ==
 
-= Why do I need to a User_ID or Access Token? =
+= Why do I need a User_ID or Access Token? =
 
 Instagram needs to know what user you are and the access token is manditory for Instagram to prove you have taken the right steps to view your gallery.
 
