@@ -33,5 +33,5 @@ The only way to get this information is through Instagram's API. I have created 
 
 == Screenshots ==
 
-1. `http://instagram.davidmregister.com/images/widget.png`
-2. `http://instagram.davidmregister.com/images/widget_settings.png`
+1. `/tags/widget.png`
+2. /tags/widget_settings.png`
