@@ -35,3 +35,16 @@ The only way to get this information is through Instagram's API. I have created 
 
 1. Widget Display
 2. Widget Settings
+
+== Changelog ==
+
+= 1.1 =
+* Added support for for showing likes and user captions.
+
+= 1.0 =
+* Initial Version. Only support for showing images.
+
+== Upgrade Notice ==
+
+= 1.1 =
+Added support for for showing likes and user captions.
