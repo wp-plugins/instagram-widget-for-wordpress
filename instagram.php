@@ -3,7 +3,7 @@
 Plugin Name: Instagram-Widget-for-WordPress
 Plugin URI: http://instagram.davdimregister.com
 Description: This plugin get a users recent images, up to 10, and displays them in a Wordpress Widget. It will also display likes and comments if uplaoded with the images.
-Version: 1.0
+Version: 1.1
 Author: David Register
 Author URI: http://davidmregister.com
 License: GPL2
