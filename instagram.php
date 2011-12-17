@@ -30,7 +30,8 @@ class Instagrm_Feed_Widget extends WP_Widget {
 		$access_token = apply_filters( 'widget_title', $instance['access_token'] );
 		
 		$picture_number = apply_filters( 'widget_title', $instance['picture_number'] );
-		
+		$show_likes = apply_filters( 'widget_title', $instance['show_likes'] );
+		$show_caption = apply_filters( 'widget_title', $instance['show_caption'] );
 		/*
 		For later use when login can be CURLed ----DO NOT UNCOMMENT THESE LINE----
 		$user_id = get_option("my_instagram_userID", true);
@@ -49,25 +50,49 @@ class Instagrm_Feed_Widget extends WP_Widget {
 		}else{
 		
 		}
-		*/	
-		
+		*/?>
+		<style>
+			.instagram_likes,.instagram_caption{
+				margin-bottom: 0px !important;
+			}
+			#instagram_widget li{
+				margin-bottom: 10px;
+			}
+		</style>
+		<?php
 		$results = $this->get_recent_data($user_id,$access_token);
 		$i=1;
 		echo "<ul id='instagram_widget'>";
-		foreach($results->data as $item){
-			if($picture_number == 0){
-				echo "<strong>Please set the Number of images to show within the widget</strong>";
-				break;
+		if(!empty($results->data)){
+			foreach($results->data as $item){
+				if($picture_number == 0){
+					echo "<strong>Please set the Number of images to show within the widget</strong>";
+					break;
+				}
+				
+				echo "<li>";
+				echo "<img src='".$item->images->thumbnail->url."' alt=''/>";
+				if($show_likes){
+					if(!empty($item->likes->count)){
+						echo "<p class='instagram_likes'>Likes: <span class='likes_count'>".$item->likes->count."</span></p>";
+					}
+				}
+				if($show_caption){
+					if(!empty($item->caption->text)){
+						echo "<p class='instagram_caption'>".$item->caption->text."</p>";
+					}
+				}
+				echo "</li>";
+				if($i == $picture_number){
+					echo "</ul>";
+					break;
+				}else{
+					$i++;
+				}
 			}
-			echo "<li><img src='".$item->images->thumbnail->url."' alt=''/></li>";
-			if($i == $picture_number){
-				echo "</ul>";
-				break;
-			}else{
-				$i++;
-			}
+		}else{
+			echo "<strong>The user currently does not have any images...</strong>";			
 		}
-		
 		echo $after_widget;
 	}
 
@@ -77,11 +102,17 @@ class Instagrm_Feed_Widget extends WP_Widget {
 		
 		//update setting with information form widget form
 		$instance['title'] = strip_tags($new_instance['title']);
-		$instance['username'] = strip_tags($new_instance['username']);
-		$instance['password'] = strip_tags($new_instance['password']);
+		//$instance['username'] = strip_tags($new_instance['username']);
+		//$instance['password'] = strip_tags($new_instance['password']);
+		
 		$instance['access_token'] = strip_tags($new_instance['access_token']);
 		$instance['user_id'] = strip_tags($new_instance['user_id']);
+		
+		
 		$instance['picture_number'] = strip_tags($new_instance['picture_number']);
+		$instance['show_likes'] = strip_tags($new_instance['show_likes']);
+		$instance['show_caption'] = strip_tags($new_instance['show_caption']);
+		
 		
 		/*
 		Automatic CURL Login for instagram authencation, Wating to upgrade Instagram App gateway
@@ -121,9 +152,13 @@ class Instagrm_Feed_Widget extends WP_Widget {
 			$title = esc_attr( $instance[ 'title' ] );
 			$username = esc_attr( $instance[ 'username' ] );
 			$password = esc_attr( $instance[ 'password' ] );
+			
 			$access_token = esc_attr( $instance[ 'access_token' ] );
 			$user_id = esc_attr( $instance[ 'user_id' ] );
+			
 			$picture_number = esc_attr( $instance[ 'picture_number' ] );
+			$show_likes = esc_attr( $instance[ 'show_likes' ] );
+			$show_caption = esc_attr( $instance[ 'show_caption' ] );
 		}
 		else {
 			$title = __( 'Title', 'text_domain' );
@@ -160,6 +195,14 @@ class Instagrm_Feed_Widget extends WP_Widget {
 					<option value="<?php echo $i;?>" <?php if($i == $picture_number){echo 'selected="selected"';};?>><?php echo $i;?></option>
 				<?php endfor;?>
 			</select>
+		</p>
+		<p>
+		<label for="<?php echo $this->get_field_id('show_likes'); ?>"><?php _e('Show Likes:'); ?></label> 
+		<input class="widefat" id="<?php echo $this->get_field_id('show_likes'); ?>" name="<?php echo $this->get_field_name('show_likes'); ?>" type="checkbox" <?php echo (($show_likes)? "CHECKED":''); ?> />
+		</p>
+		<p>
+		<label for="<?php echo $this->get_field_id('show_caption'); ?>"><?php _e('Show Caption:'); ?></label> 
+		<input class="widefat" id="<?php echo $this->get_field_id('show_caption'); ?>" name="<?php echo $this->get_field_name('show_caption'); ?>" type="checkbox" <?php echo (($show_caption)? "CHECKED":''); ?> />
 		</p>
 		<p>If you do not have a ID or access token, please visit <a href="http://instagram.davidmregister.com/" target="_blank">Get Access token</a> to receive a valid token</p>
 		<?php 
