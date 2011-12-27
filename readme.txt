@@ -4,13 +4,13 @@ Donate link: http://instagram.davidmregister.com/
 Tags: instagram, gallery, widget, instagram images
 Requires at least: 3.0
 Tested up to: 3.3
-Stable tag: 1
+Stable tag: 1.2
 
-This plugin gets a user's recent images, up to 10, and displays them in a Wordpress Widget. It has the option to display likes and comments also.
+This plugin gets a user's recent images, up to 10, and displays them in a Wordpress Widget. It has the option to display likes and comments also. 
 
 == Description ==
 
-This plugin gets a users most recent activity, up to 10, and displays them in a Wordpress Widget. It has the option to display likes and comments also. It creates a widget where all the settings can be adjusted.
+This plugin gets a users most recent activity, up to 10, and displays them in a Wordpress Widget. It has the option to display likes and comments also. It creates a widget where all the settings can be adjusted. Recently added support for different size images and image linking.
 
 == Installation ==
 
@@ -38,13 +38,21 @@ The only way to get this information is through Instagram's API. I have created 
 
 == Changelog ==
 
+= 1.2 =
+Added option to view multiple image sizes, thumbnail being the standard.
+Added option to link images to instagram website.
+
 = 1.1 =
-* Added support for for showing likes and user captions.
+* Added support for showing likes and user captions.
 
 = 1.0 =
 * Initial Version. Only support for showing images.
 
 == Upgrade Notice ==
+
+= 1.2 =
+Added option to view multiple image sizes, thumbnail being the standard.
+Added option to link images to instagram website.
 
 = 1.1 =
 Added support for for showing likes and user captions.

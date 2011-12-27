@@ -3,7 +3,7 @@
 Plugin Name: Instagram-Widget-for-WordPress
 Plugin URI: http://instagram.davidmregister.com
 Description: This plugin get a users recent images, up to 10, and displays them in a Wordpress Widget. It will also display likes and comments if uplaoded with the images.
-Version: 1.1
+Version: 1.2
 Author: David Register
 Author URI: http://davidmregister.com
 License: GPL2
@@ -30,6 +30,9 @@ class Instagrm_Feed_Widget extends WP_Widget {
 		$access_token = apply_filters( 'widget_title', $instance['access_token'] );
 		
 		$picture_number = apply_filters( 'widget_title', $instance['picture_number'] );
+		$picture_size = apply_filters( 'widget_title', $instance['picture_size'] );
+		$link_images = apply_filters( 'widget_title', $instance['link_images'] );
+		
 		$show_likes = apply_filters( 'widget_title', $instance['show_likes'] );
 		$show_caption = apply_filters( 'widget_title', $instance['show_caption'] );
 		/*
@@ -71,7 +74,11 @@ class Instagrm_Feed_Widget extends WP_Widget {
 				}
 				
 				echo "<li>";
-				echo "<img src='".$item->images->thumbnail->url."' alt=''/>";
+				if(!empty($link_images)){
+					echo "<a href='".$item->link."' target='_blank'><img src='".$item->images->$picture_size->url."' alt='".$title." image'/></a>";
+				}else{
+					echo "<img src='".$item->images->$picture_size->url."' alt=''/>";
+				}
 				if($show_likes){
 					if(!empty($item->likes->count)){
 						echo "<p class='instagram_likes'>Likes: <span class='likes_count'>".$item->likes->count."</span></p>";
@@ -110,9 +117,11 @@ class Instagrm_Feed_Widget extends WP_Widget {
 		
 		
 		$instance['picture_number'] = strip_tags($new_instance['picture_number']);
+		$instance['picture_size'] = strip_tags($new_instance['picture_size']);
+		$instance['link_images'] = strip_tags($new_instance['link_images']);
+		
 		$instance['show_likes'] = strip_tags($new_instance['show_likes']);
 		$instance['show_caption'] = strip_tags($new_instance['show_caption']);
-		
 		
 		/*
 		Automatic CURL Login for instagram authencation, Wating to upgrade Instagram App gateway
@@ -157,8 +166,13 @@ class Instagrm_Feed_Widget extends WP_Widget {
 			$user_id = esc_attr( $instance[ 'user_id' ] );
 			
 			$picture_number = esc_attr( $instance[ 'picture_number' ] );
+			$picture_size = esc_attr( $instance[ 'picture_size' ] );
+			
 			$show_likes = esc_attr( $instance[ 'show_likes' ] );
 			$show_caption = esc_attr( $instance[ 'show_caption' ] );
+			
+			$link_images = esc_attr( $instance[ 'link_images' ] );
+			
 		}
 		else {
 			$title = __( 'Title', 'text_domain' );
@@ -166,6 +180,8 @@ class Instagrm_Feed_Widget extends WP_Widget {
 			$access_token = __( 'Access Token', 'text_domain' );
 			$user_id = __( 'User ID', 'text_domain' );
 		}
+		
+		$picture_sizes = array('thumbnail' => 'Thumbnail', 'low_resolution' => 'Low Resolution','standard_resolution' => 'Standard Resolution');
 		?>
 		<p>
 		<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?></label> 
@@ -195,6 +211,18 @@ class Instagrm_Feed_Widget extends WP_Widget {
 					<option value="<?php echo $i;?>" <?php if($i == $picture_number){echo 'selected="selected"';};?>><?php echo $i;?></option>
 				<?php endfor;?>
 			</select>
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id('picture_size'); ?>"><?php _e('Picture Size:'); ?></label> 
+			<select id="<?php echo $this->get_field_id('picture_size'); ?>" name="<?php echo $this->get_field_name('picture_size'); ?>">
+					<?php foreach($picture_sizes as $item => $val):?>
+						<option value="<?php echo $item;?>" <?php if($item == $picture_size){echo 'selected="selected"';};?>><?php echo $val;?></option>
+					<?php endforeach;?>
+			</select>
+		</p>
+		<p>
+		<label for="<?php echo $this->get_field_id('link_images'); ?>"><?php _e('Link images to full image:'); ?></label> 
+		<input class="widefat" id="<?php echo $this->get_field_id('link_images'); ?>" name="<?php echo $this->get_field_name('link_images'); ?>" type="checkbox" <?php echo (($link_images)? "CHECKED":''); ?> />
 		</p>
 		<p>
 		<label for="<?php echo $this->get_field_id('show_likes'); ?>"><?php _e('Show Likes:'); ?></label> 
