@@ -35,25 +35,12 @@ class Instagrm_Feed_Widget extends WP_Widget {
 		
 		$show_likes = apply_filters( 'widget_title', $instance['show_likes'] );
 		$show_caption = apply_filters( 'widget_title', $instance['show_caption'] );
-		/*
-		For later use when login can be CURLed ----DO NOT UNCOMMENT THESE LINE----
-		$user_id = get_option("my_instagram_userID", true);
-		$access_token = get_option("my_instagram_accesstoken", true);
-		*/
 		
 		echo $before_widget;
 		if ( $title ){
 			echo $before_username ."<p id='instagram_widget_title'>". $title ."</p>". $after_username; 
-		};
+		};?>
 		
-		/*
-		For later use when login can be CURLed ----DO NOT UNCOMMENT THESE LINE----
-		if(get_option("my_instagram_error_message")){
-			echo get_option("my_instagram_error_message", true);
-		}else{
-		
-		}
-		*/?>
 		<style>
 			.instagram_likes,.instagram_caption{
 				margin-bottom: 0px !important;
@@ -109,8 +96,6 @@ class Instagrm_Feed_Widget extends WP_Widget {
 		
 		//update setting with information form widget form
 		$instance['title'] = strip_tags($new_instance['title']);
-		//$instance['username'] = strip_tags($new_instance['username']);
-		//$instance['password'] = strip_tags($new_instance['password']);
 		
 		$instance['access_token'] = strip_tags($new_instance['access_token']);
 		$instance['user_id'] = strip_tags($new_instance['user_id']);
@@ -122,36 +107,7 @@ class Instagrm_Feed_Widget extends WP_Widget {
 		
 		$instance['show_likes'] = strip_tags($new_instance['show_likes']);
 		$instance['show_caption'] = strip_tags($new_instance['show_caption']);
-		
-		/*
-		Automatic CURL Login for instagram authencation, Wating to upgrade Instagram App gateway
-		this will elimiate the step of getting your User_ID and access token manually
-		
-		$ch = curl_init('https://api.instagram.com/oauth/access_token');
-		curl_setopt ($ch, CURLOPT_POST, 1);
-		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt ($ch, CURLOPT_POSTFIELDS, "username=".$instance['username']."&password=".$instance['password']."&grant_type=password&client_id=314982808dbd45fa8e9d519780adead3&client_secret=7755f3f394154c7ea899b07dbdb7ffca");
-		$result = curl_exec ($ch);
-		curl_close ($ch);
-					
-		// convert output to an array from JSON
-			$result = json_decode($result);
-			
-		// Error detection
-			if(($result->error_message) != ""){ 
-				update_option("my_instagram_error_message", $result->error_message);
-			}else{		
-				
-				// get user_id and accesss_token from curl response
-					$userID = $result->user->id;
-					$token = $result->access_token;
-					
-				// save to DB for later use
-					update_option("my_instagram_userID", $userID);
-					update_option("my_instagram_accesstoken", $token);
-					update_option("my_instagram_error_message", $token);
-			}
-		*/
+
 		return $instance;
 	}
 
@@ -187,14 +143,6 @@ class Instagrm_Feed_Widget extends WP_Widget {
 		<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?></label> 
 		<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
 		</p>
-		<!--<p>
-		<label for="<?php echo $this->get_field_id('username'); ?>"><?php _e('Username:'); ?></label> 
-		<input class="widefat" id="<?php echo $this->get_field_id('username'); ?>" name="<?php echo $this->get_field_name('username'); ?>" type="text" value="<?php echo $username; ?>" />
-		</p>
-		<p>
-		<label for="<?php echo $this->get_field_id('password'); ?>"><?php _e('Password:'); ?></label> 
-		<input class="widefat" id="<?php echo $this->get_field_id('password'); ?>" name="<?php echo $this->get_field_name('password'); ?>" type="password" value="<?php echo $password; ?>" />
-		</p>-->
 		<p>
 		<label for="<?php echo $this->get_field_id('user_id'); ?>"><?php _e('User ID:'); ?></label> 
 		<input class="widefat" id="<?php echo $this->get_field_id('user_id'); ?>" name="<?php echo $this->get_field_name('user_id'); ?>" type="text" value="<?php echo $user_id; ?>" />
@@ -204,21 +152,21 @@ class Instagrm_Feed_Widget extends WP_Widget {
 		<input class="widefat" id="<?php echo $this->get_field_id('access_token'); ?>" name="<?php echo $this->get_field_name('access_token'); ?>" type="text" value="<?php echo $access_token; ?>" />
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id('picture_number'); ?>"><?php _e('Number of Images:'); ?></label> 
-			<select id="<?php echo $this->get_field_id('picture_number'); ?>" name="<?php echo $this->get_field_name('picture_number'); ?>">
-					<option value="0">Select Number</option>
-				<?php for($i=1;$i<11;$i++):?>
-					<option value="<?php echo $i;?>" <?php if($i == $picture_number){echo 'selected="selected"';};?>><?php echo $i;?></option>
-				<?php endfor;?>
-			</select>
+		<label for="<?php echo $this->get_field_id('picture_number'); ?>"><?php _e('Number of Images:'); ?></label> 
+		<select id="<?php echo $this->get_field_id('picture_number'); ?>" name="<?php echo $this->get_field_name('picture_number'); ?>">
+				<option value="0">Select Number</option>
+			<?php for($i=1;$i<11;$i++):?>
+				<option value="<?php echo $i;?>" <?php if($i == $picture_number){echo 'selected="selected"';};?>><?php echo $i;?></option>
+			<?php endfor;?>
+		</select>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id('picture_size'); ?>"><?php _e('Picture Size:'); ?></label> 
-			<select id="<?php echo $this->get_field_id('picture_size'); ?>" name="<?php echo $this->get_field_name('picture_size'); ?>">
-					<?php foreach($picture_sizes as $item => $val):?>
-						<option value="<?php echo $item;?>" <?php if($item == $picture_size){echo 'selected="selected"';};?>><?php echo $val;?></option>
-					<?php endforeach;?>
-			</select>
+		<label for="<?php echo $this->get_field_id('picture_size'); ?>"><?php _e('Picture Size:'); ?></label> 
+		<select id="<?php echo $this->get_field_id('picture_size'); ?>" name="<?php echo $this->get_field_name('picture_size'); ?>">
+				<?php foreach($picture_sizes as $item => $val):?>
+					<option value="<?php echo $item;?>" <?php if($item == $picture_size){echo 'selected="selected"';};?>><?php echo $val;?></option>
+				<?php endforeach;?>
+		</select>
 		</p>
 		<p>
 		<label for="<?php echo $this->get_field_id('link_images'); ?>"><?php _e('Link images to full image:'); ?></label> 
