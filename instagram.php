@@ -48,7 +48,10 @@ class Instagrm_Feed_Widget extends WP_Widget {
 				echo '<p>Curl is <b>Enabled</b></p>'; 
 				echo '<p>Curl Version Number:<br />'.$curl_ver['version_number'].'</p>'; 
 				$results = $this->get_recent_data($user_id,$access_token);
-				print_r($results->meta);
+				echo '<p><b>Results</b>:</p>'; 
+				foreach($results->meta as $key => $val){
+					echo "<p>".$key.": ".$val."</p>";
+				}
 			}else{
 				echo '<p>Curl is <b>NOT</b> Enabled</p>'; 
 			}
