@@ -38,6 +38,10 @@ The only way to get this information is through Instagram's API. I have created 
 
 == Changelog ==
 
+= 1.3 =
+Added Debug Mode for troubleshooting
+Cleaned and optimized code
+
 = 1.2 =
 Added option to view multiple image sizes, thumbnail being the standard.
 Added option to link images to instagram website.

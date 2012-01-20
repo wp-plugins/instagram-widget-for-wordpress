@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: Instagram-Widget-for-WordPress
-Plugin URI: http://instagram.davidmregister.com
+Plugin URI: http://davidmregister.com/instagram-widget-for-wordpress
 Description: This plugin get a users recent images, up to 10, and displays them in a Wordpress Widget. It will also display likes and comments if uplaoded with the images.
-Version: 1.2
+Version: 1.3
 Author: David Register
 Author URI: http://davidmregister.com
 License: GPL2
@@ -23,8 +23,6 @@ class Instagrm_Feed_Widget extends WP_Widget {
 		extract( $args );
 		//get widget information to display on page
 		$title = apply_filters( 'widget_title', $instance['title'] );
-		$username = apply_filters( 'widget_title', $instance['username'] );
-		$password = apply_filters( 'widget_title', $instance['password'] );
 		
 		$user_id = apply_filters( 'widget_title', $instance['user_id'] );
 		$access_token = apply_filters( 'widget_title', $instance['access_token'] );
@@ -36,11 +34,28 @@ class Instagrm_Feed_Widget extends WP_Widget {
 		$show_likes = apply_filters( 'widget_title', $instance['show_likes'] );
 		$show_caption = apply_filters( 'widget_title', $instance['show_caption'] );
 		
+		$debug_mode = apply_filters( 'widget_title', $instance['debug_mode'] );
+		
 		echo $before_widget;
 		if ( $title ){
 			echo $before_username ."<p id='instagram_widget_title'>". $title ."</p>". $after_username; 
-		};?>
+		};
 		
+		if($debug_mode){
+			
+			if(curl_version()){
+				$curl_ver = curl_version();
+				echo '<p>Curl is <b>Enabled</b></p>'; 
+				echo '<p>Curl Version Number:<br />'.$curl_ver['version_number'].'</p>'; 
+				$results = $this->get_recent_data($user_id,$access_token);
+				print_r($results->meta);
+			}else{
+				echo '<p>Curl is <b>NOT</b> Enabled</p>'; 
+			}
+			return;
+		}
+		
+		?>
 		<style>
 			.instagram_likes,.instagram_caption{
 				margin-bottom: 0px !important;
@@ -107,7 +122,9 @@ class Instagrm_Feed_Widget extends WP_Widget {
 		
 		$instance['show_likes'] = strip_tags($new_instance['show_likes']);
 		$instance['show_caption'] = strip_tags($new_instance['show_caption']);
-
+		
+		$instance['debug_mode'] = strip_tags($new_instance['debug_mode']);
+		
 		return $instance;
 	}
 
@@ -115,8 +132,6 @@ class Instagrm_Feed_Widget extends WP_Widget {
 	function form( $instance ) {
 		if ( $instance ) {
 			$title = esc_attr( $instance[ 'title' ] );
-			$username = esc_attr( $instance[ 'username' ] );
-			$password = esc_attr( $instance[ 'password' ] );
 			
 			$access_token = esc_attr( $instance[ 'access_token' ] );
 			$user_id = esc_attr( $instance[ 'user_id' ] );
@@ -128,6 +143,8 @@ class Instagrm_Feed_Widget extends WP_Widget {
 			$show_caption = esc_attr( $instance[ 'show_caption' ] );
 			
 			$link_images = esc_attr( $instance[ 'link_images' ] );
+			
+			$debug_mode = esc_attr( $instance['debug_mode'] );
 			
 		}
 		else {
@@ -152,21 +169,21 @@ class Instagrm_Feed_Widget extends WP_Widget {
 		<input class="widefat" id="<?php echo $this->get_field_id('access_token'); ?>" name="<?php echo $this->get_field_name('access_token'); ?>" type="text" value="<?php echo $access_token; ?>" />
 		</p>
 		<p>
-		<label for="<?php echo $this->get_field_id('picture_number'); ?>"><?php _e('Number of Images:'); ?></label> 
-		<select id="<?php echo $this->get_field_id('picture_number'); ?>" name="<?php echo $this->get_field_name('picture_number'); ?>">
-				<option value="0">Select Number</option>
-			<?php for($i=1;$i<11;$i++):?>
-				<option value="<?php echo $i;?>" <?php if($i == $picture_number){echo 'selected="selected"';};?>><?php echo $i;?></option>
-			<?php endfor;?>
-		</select>
+			<label for="<?php echo $this->get_field_id('picture_number'); ?>"><?php _e('Number of Images:'); ?></label> 
+			<select id="<?php echo $this->get_field_id('picture_number'); ?>" name="<?php echo $this->get_field_name('picture_number'); ?>">
+					<option value="0">Select Number</option>
+				<?php for($i=1;$i<11;$i++):?>
+					<option value="<?php echo $i;?>" <?php if($i == $picture_number){echo 'selected="selected"';};?>><?php echo $i;?></option>
+				<?php endfor;?>
+			</select>
 		</p>
 		<p>
-		<label for="<?php echo $this->get_field_id('picture_size'); ?>"><?php _e('Picture Size:'); ?></label> 
-		<select id="<?php echo $this->get_field_id('picture_size'); ?>" name="<?php echo $this->get_field_name('picture_size'); ?>">
-				<?php foreach($picture_sizes as $item => $val):?>
-					<option value="<?php echo $item;?>" <?php if($item == $picture_size){echo 'selected="selected"';};?>><?php echo $val;?></option>
-				<?php endforeach;?>
-		</select>
+			<label for="<?php echo $this->get_field_id('picture_size'); ?>"><?php _e('Picture Size:'); ?></label> 
+			<select id="<?php echo $this->get_field_id('picture_size'); ?>" name="<?php echo $this->get_field_name('picture_size'); ?>">
+					<?php foreach($picture_sizes as $item => $val):?>
+						<option value="<?php echo $item;?>" <?php if($item == $picture_size){echo 'selected="selected"';};?>><?php echo $val;?></option>
+					<?php endforeach;?>
+			</select>
 		</p>
 		<p>
 		<label for="<?php echo $this->get_field_id('link_images'); ?>"><?php _e('Link images to full image:'); ?></label> 
@@ -179,6 +196,10 @@ class Instagrm_Feed_Widget extends WP_Widget {
 		<p>
 		<label for="<?php echo $this->get_field_id('show_caption'); ?>"><?php _e('Show Caption:'); ?></label> 
 		<input class="widefat" id="<?php echo $this->get_field_id('show_caption'); ?>" name="<?php echo $this->get_field_name('show_caption'); ?>" type="checkbox" <?php echo (($show_caption)? "CHECKED":''); ?> />
+		</p>
+		<p>
+		<label for="<?php echo $this->get_field_id('debug_mode'); ?>"><?php _e('Debug Mode:'); ?></label> 
+		<input class="widefat" id="<?php echo $this->get_field_id('debug_mode'); ?>" name="<?php echo $this->get_field_name('debug_mode'); ?>" type="checkbox" <?php echo (($debug_mode)? "CHECKED":''); ?> />
 		</p>
 		<p>If you do not have a ID or access token, please visit <a href="http://instagram.davidmregister.com/" target="_blank">Get Access token</a> to receive a valid token</p>
 		<?php 
