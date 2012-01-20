@@ -38,6 +38,9 @@ The only way to get this information is through Instagram's API. I have created 
 
 == Changelog ==
 
+= 1.3.1 =
+Improved Debug Mode
+
 = 1.3 =
 Added Debug Mode for troubleshooting
 Cleaned and optimized code

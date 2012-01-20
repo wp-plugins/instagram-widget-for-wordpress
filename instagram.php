@@ -3,7 +3,7 @@
 Plugin Name: Instagram-Widget-for-WordPress
 Plugin URI: http://davidmregister.com/instagram-widget-for-wordpress
 Description: This plugin get a users recent images, up to 10, and displays them in a Wordpress Widget. It will also display likes and comments if uplaoded with the images.
-Version: 1.3
+Version: 1.3.1
 Author: David Register
 Author URI: http://davidmregister.com
 License: GPL2
@@ -46,7 +46,9 @@ class Instagrm_Feed_Widget extends WP_Widget {
 			if(curl_version()){
 				$curl_ver = curl_version();
 				echo '<p>Curl is <b>Enabled</b></p>'; 
-				echo '<p>Curl Version Number:<br />'.$curl_ver['version_number'].'</p>'; 
+				echo '<p>Curl Version Number:<br />'.$curl_ver['version_number'].'</p>';
+				echo '<p>User ID:<br />'.$user_id.'</p>'; 
+				echo '<p>Access Token:<br /><span style="word-wrap:break-word;width:100px;">'.$access_token.'</span></p>'; 
 				$results = $this->get_recent_data($user_id,$access_token);
 				echo '<p><b>Results</b>:</p>'; 
 				foreach($results->meta as $key => $val){
