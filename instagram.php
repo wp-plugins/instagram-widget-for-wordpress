@@ -43,7 +43,8 @@ class Instagrm_Feed_Widget extends WP_Widget {
 		
 		if($debug_mode){
 			
-			if(curl_version()){
+			// Check requirements
+        	if (extension_loaded('curl')){
 				$curl_ver = curl_version();
 				echo '<p>Curl is <b>Enabled</b></p>'; 
 				echo '<p>Curl Version Number:<br />'.$curl_ver['version_number'].'</p>';
